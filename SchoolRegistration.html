@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School Registration</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+
+  <!-- Inline CSS -->
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('images/FREEP-BG-3.8.2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(5px);
+      z-index: -1;
+    }
+
+    .registration-container {
+      background: #fff;
+      width: 90%;
+      max-width: 900px;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+      margin: 40px 0;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    fieldset {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #fafafa;
+    }
+
+    legend {
+      font-weight: 600;
+      color: #5b86e5;
+      font-size: 16px;
+      padding: 0 10px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #5b86e5;
+      outline: none;
+      box-shadow: 0 0 4px rgba(91, 134, 229, 0.3);
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      border: none;
+      outline: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 15px;
+    }
+
+    #addTeacherBtn {
+      background: #5b86e5;
+      color: white;
+      margin-top: 10px;
+    }
+
+    #addTeacherBtn:hover {
+      background: #4a74d4;
+    }
+
+    .remove-teacher {
+      background: #e74c3c;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .remove-teacher:hover {
+      background: #c0392b;
+    }
+
+    .form-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    #submitBtn {
+      background: #36d1dc;
+      color: white;
+    }
+
+    #submitBtn:hover {
+      background: #2aa8b0;
+    }
+
+    #resetBtn {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    #resetBtn:hover {
+      background: #ddd;
+    }
+
+    .teacher-block {
+      border: 1px solid #ddd;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .teacher-block h4 {
+      margin: 0 0 10px 0;
+      color: #444;
+      font-size: 16px;
+    }
+
+    .otp-notice {
+      background: #e8f0ff;
+      padding: 10px;
+      border-left: 4px solid #5b86e5;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      padding: 10px 15px;
+      margin-top: 15px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .message.success {
+      background: #eafbea;
+      color: #2d862d;
+      border: 1px solid #9fe79f;
+    }
+
+    .message.error {
+      background: #ffe4e4;
+      color: #d9534f;
+      border: 1px solid #f5b7b1;
+    }
+
+    .message.loading {
+      background: #fff5e6;
+      color: #b36b00;
+      border: 1px solid #ffd280;
+    }
+
+    @media (max-width: 600px) {
+      .registration-container {
+        padding: 20px;
+      }
+      .form-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="registration-container">
+    <h2>School Registration</h2>
+    <form action="process_school_registration.php" method="POST" id="registrationForm" enctype="multipart/form-data">
+      <!-- School & Principal Details -->
+      <fieldset>
+        <legend><i class="fas fa-school"></i> School & Principal Details</legend>
+        <div class="input-group">
+          <label for="school_name">School Name *</label>
+          <input type="text" id="school_name" name="school_name" required />
+        </div>
+        <div class="input-group">
+          <label for="school_code">School Code / DOE ID *</label>
+          <input type="text" id="school_code" name="school_code" required />
+        </div>
+        <div class="input-group">
+          <label for="district">District / Zone *</label>
+          <select id="district" name="district" required>
+            <option value="">Select District</option>
+            <option>Central Delhi</option>
+            <option>East Delhi</option>
+            <option>New Delhi</option>
+            <option>North Delhi</option>
+            <option>North East Delhi</option>
+            <option>North West Delhi</option>
+            <option>South Delhi</option>
+            <option>South East Delhi</option>
+            <option>South West Delhi</option>
+            <option>West Delhi</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="school_type">School Type *</label>
+          <select id="school_type" name="school_type" required>
+            <option value="">Select Type</option>
+            <option>Govt</option>
+            <option>Govt Aided</option>
+            <option>Private</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="address">School Address *</label>
+          <textarea id="address" name="address" rows="3" required></textarea>
+        </div>
+        <div class="input-group">
+          <label for="principal_name">Principal Name *</label>
+          <input type="text" id="principal_name" name="principal_name" required />
+        </div>
+        <div class="input-group">
+          <label for="principal_mobile">Principal Mobile *</label>
+          <input type="text" id="principal_mobile" name="principal_mobile" required placeholder="XXXXXXXXXX" />
+        </div>
+        <div class="input-group">
+          <label for="principal_email">Principal Email *</label>
+          <input type="email" id="principal_email" name="principal_email" required />
+          <small style="color: #666; font-size: 12px;">After entering your email, you will receive an OTP for email verification.</small>
+        </div>
+        <div class="input-group">
+          <label for="password">Password *</label>
+          <input type="password" id="password" name="password" required minlength="6" placeholder="Minimum 6 characters" />
+        </div>
+        <div class="input-group">
+          <label for="confirm_password">Confirm Password *</label>
+          <input type="password" id="confirm_password" name="confirm_password" required minlength="6" />
+        </div>
+      </fieldset>
+
+      <!-- Teacher Details -->
+      <fieldset>
+        <legend><i class="fas fa-chalkboard-teacher"></i> Teacher Details</legend>
+        <div id="teachersContainer">
+          <div class="teacher-block" data-index="0">
+            <h4>Teacher 1</h4>
+            <div class="input-group">
+              <label>Teacher Name *</label>
+              <input type="text" name="teacher_name[]" required />
+            </div>
+            <div class="input-group">
+              <label>Designation *</label>
+              <select name="designation[]" required>
+                <option value="">Select Designation</option>
+                <option>PGT</option>
+                <option>TGT</option>
+                <option>PRT</option>
+                <option>Coordinator</option>
+                <option>Principal</option>
+                <option>Vice Principal</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Subject</label>
+              <input type="text" name="subject[]" />
+            </div>
+            <div class="input-group">
+              <label>Class Assigned *</label>
+              <select name="class_assigned[]" required>
+                <option value="">Select Class</option>
+                <option>11</option>
+                <option>12</option>
+                <option>Both</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Email</label>
+              <input type="email" name="teacher_email[]" />
+            </div>
+            <div class="input-group">
+              <label>Mobile Number *</label>
+              <input type="text" name="teacher_mobile[]" required placeholder="XXXXXXXXXX" />
+            </div>
+            <button type="button" class="remove-teacher" onclick="removeTeacher(this)">Remove Teacher</button>
+          </div>
+        </div>
+        <button type="button" id="addTeacherBtn">Add Another Teacher</button>
+      </fieldset>
+
+      <fieldset id="otpSection" style="display: none;">
+        <legend><i class="fas fa-envelope"></i> Email Verification</legend>
+        <div class="input-group">
+          <label for="otp">Enter 6-digit OTP *</label>
+          <input type="text" id="otp" name="otp" maxlength="6" placeholder="Enter OTP sent to your email" />
+          <small style="color: #666; font-size: 12px;">OTP sent to the principal's email address.</small>
+        </div>
+        <button type="button" id="resendOtpBtn" style="display: none;">Resend OTP</button>
+      </fieldset>
+
+      <div class="otp-notice">
+        <p><strong>Note:</strong> After registration, an OTP will be sent to the principal's email for verification.</p>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" id="submitBtn">Submit</button>
+        <button type="reset" id="resetBtn">Reset</button>
+      </div>
+    </form>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function renumberTeachers() {
+      const container = document.getElementById("teachersContainer");
+      const teacherBlocks = container.querySelectorAll(".teacher-block");
+      teacherBlocks.forEach((block, index) => {
+        block.querySelector("h4").textContent = "Teacher " + (index + 1);
+        block.setAttribute("data-index", index);
+      });
+    }
+
+    function removeTeacher(button) {
+      button.parentElement.remove();
+      renumberTeachers();
+    }
+
+    document.getElementById("addTeacherBtn").addEventListener("click", () => {
+      const container = document.getElementById("teachersContainer");
+      const teacherBlock = document.createElement("div");
+      teacherBlock.className = "teacher-block";
+      teacherBlock.innerHTML = `
+        <h4>Teacher</h4>
+        <div class="input-group"><label>Teacher Name *</label><input type="text" name="teacher_name[]" required></div>
+        <div class="input-group"><label>Designation *</label><select name="designation[]" required><option value="">Select Designation</option><option>PGT</option><option>TGT</option><option>PRT</option><option>Coordinator</option><option>Principal</option><option>Vice Principal</option><option>Other</option></select></div>
+        <div class="input-group"><label>Subject</label><input type="text" name="subject[]"></div>
+        <div class="input-group"><label>Class Assigned *</label><select name="class_assigned[]" required><option value="">Select Class</option><option>11</option><option>12</option><option>Both</option></select></div>
+        <div class="input-group"><label>Email</label><input type="email" name="teacher_email[]"></div>
+        <div class="input-group"><label>Mobile Number *</label><input type="text" name="teacher_mobile[]" required placeholder="XXXXXXXXXX"></div>
+        <button type="button" class="remove-teacher" onclick="removeTeacher(this)">Remove Teacher</button>
+      `;
+      container.appendChild(teacherBlock);
+      renumberTeachers();
+    });
+
+    // Form submission handling
+    document.getElementById("registrationForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // Prevent default form submission
+
+      const messageDiv = document.getElementById("message");
+      messageDiv.style.display = "block";
+      messageDiv.className = "message loading";
+      messageDiv.textContent = "Processing registration...";
+
+      const formData = new FormData(this);
+
+      fetch("process_school_registration.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          messageDiv.className = "message success";
+          messageDiv.textContent = data.message;
+          // Optionally reset the form or redirect
+          // document.getElementById("registrationForm").reset();
+        } else {
+          messageDiv.className = "message error";
+          messageDiv.textContent = data.message;
+        }
+      })
+      .catch(error => {
+        messageDiv.className = "message error";
+        messageDiv.textContent = "An error occurred. Please try again.";
+        console.error("Error:", error);
+      });
+    });
+
+    renumberTeachers();
+  </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account / Login</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+/* General Page Setup */
+body {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('images/FREEP-BG-3.8.2.jpg') no-repeat center center;
+  background-size: cover;
+  filter: blur(5px);
+  z-index: -1;
+}
+
+/* Container */
+.login-container {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.login-container h2 {
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Input Fields */
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #6e8efb;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #5a7de1, #9268da);
+}
+
+/* Divider */
+.divider {
+  margin: 20px 0;
+  text-align: center;
+  position: relative;
+  font-size: 14px;
+  color: #888;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: #ccc;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+/* Google Button */
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #444;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-decoration: none;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.google-btn img {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.google-btn:hover {
+  background: #f5f5f5;
+  border-color: #999;
+}
+
+/* Toggle link */
+.toggle-link {
+  color: #6e8efb;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.toggle-link:hover {
+  color: #a777e3;
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+}
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2 id="formTitle">Create New Account</h2>
+
+    <!-- Signup Form -->
+    <form id="signupForm" method="POST" action="signup.php">
+      <div class="input-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter password" required>
+      </div>
+
+      <div class="input-group">
+        <label for="confirmPassword">Re-enter Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required>
+      </div>
+
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <!-- Login Form (hidden by default) -->
+    <form id="loginForm" method="POST" action="login.php" style="display:none;">
+      <div class="input-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="input-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" name="password" placeholder="Enter password" required>
+      </div>
+
+      <?php if (isset($_GET['error'])): ?>
+        <div class="error-message"><?php echo htmlspecialchars($_GET['error']); ?></div>
+      <?php endif; ?>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p>
+      <span class="toggle-link" onclick="window.location.href='leaderboard.php'">🏆 View Leaderboard</span>
+    </p>
+
+    <p>
+      <span class="toggle-link">Already have an account? Login</span>
+    </p>
+  </div>
+
+  <script>
+    // Auto-switch to login if there's an error in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('error')) {
+      document.getElementById("signupForm").style.display = "none";
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("formTitle").textContent = "Login to Your Account";
+      document.querySelector(".toggle-link").textContent = "Don't have an account? Sign Up";
+    }
+  </script>
+  <script src="index.js"></script>
+</body>
+</html>

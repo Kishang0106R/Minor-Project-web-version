@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Admin Login</title>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="index.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Teacher Admin Login</h2>
+
+    <!-- Display error message if present -->
+    <?php if (isset($_GET['error'])): ?>
+      <div class="error-message">
+        <?php echo htmlspecialchars($_GET['error']); ?>
+      </div>
+    <?php endif; ?>
+
+    <!-- Teacher Login Form -->
+    <form method="POST" action="TeacherLogin.php">
+      <input type="hidden" name="login_type" value="teacher">
+
+      <div class="input-group">
+        <label for="email">Teacher Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter teacher email" required>
+      </div>
+
+      <div class="input-group">
+        <label for="password">School Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter school password" required>
+      </div>
+
+      <button type="submit" name="login">Login to Teacher Admin</button>
+    </form>
+
+    <p>
+      <span class="toggle-link" onclick="window.location.href='leaderboard.php'">🏆 View Leaderboard</span>
+    </p>
+
+    <p>
+      <span class="toggle-link" onclick="window.location.href='SchoolLogin.html'">
+        ← Back to Principal Login
+      </span>
+    </p>
+  </div>
+
+  <!-- Optional JavaScript (for interactivity or animations) -->
+  <script src="index.js"></script>
+  <style>
+/* ===== Base Page Setup ===== */
+body {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('images/FREEP-BG-3.8.2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(5px);
+  z-index: -1;
+}
+
+/* ===== Container ===== */
+.login-container {
+  background: #fff;
+  padding: 40px 35px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  width: 360px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.login-container h2 {
+  margin-bottom: 25px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* ===== Input Fields ===== */
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #6e8efb;
+}
+
+/* ===== Button ===== */
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #5a7de1, #9268da);
+}
+
+/* ===== Back Link ===== */
+.toggle-link {
+  display: inline-block;
+  color: #6e8efb;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 15px;
+  transition: color 0.3s;
+}
+
+.toggle-link:hover {
+  color: #a777e3;
+}
+
+/* ===== Error Message ===== */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: -5px;
+  text-align: left;
+}
+  </style>
+

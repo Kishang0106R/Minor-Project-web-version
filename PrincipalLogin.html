@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Principal Admin Login</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    /* ----------- GLOBAL STYLES ----------- */
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #333;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('images/FREEP-BG-3.8.2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(5px);
+      z-index: -1;
+    }
+
+    /* ----------- LOGIN CONTAINER ----------- */
+    .login-container {
+      background: #fff;
+      padding: 40px 35px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #224abe;
+      margin-bottom: 25px;
+      font-size: 24px;
+    }
+
+    /* ----------- INPUT GROUP ----------- */
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      font-weight: 600;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: #224abe;
+      box-shadow: 0 0 5px rgba(34, 74, 190, 0.3);
+      outline: none;
+    }
+
+    /* ----------- BUTTON ----------- */
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #224abe;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #1e3f8e;
+    }
+
+    /* ----------- DIVIDER ----------- */
+    .divider {
+      margin: 20px 0;
+      font-size: 14px;
+      color: #888;
+      position: relative;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      width: 40%;
+      background: #ccc;
+      position: absolute;
+      top: 50%;
+    }
+
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+
+    /* ----------- FOOTER NOTE ----------- */
+    .footer-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0f4ff;
+      padding: 12px;
+      border-radius: 8px;
+      color: #224abe;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .footer-note:hover {
+      background-color: #e1e7ff;
+    }
+
+    .footer-note i {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+
+    /* ----------- TOGGLE LINKS ----------- */
+    .toggle-link {
+      color: #224abe;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-link:hover {
+      text-decoration: underline;
+    }
+
+    p {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    /* ----------- RESPONSIVE ----------- */
+    @media (max-width: 480px) {
+      .login-container {
+        width: 90%;
+        padding: 25px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-container">
+    <h2 id="formTitle">Principal Admin Login</h2>
+
+    <!-- Display error message if present -->
+    <?php if (isset($_GET['error'])): ?>
+      <div class="error-message" style="color: red; font-size: 14px; margin-bottom: 15px; text-align: left;">
+        <?php echo htmlspecialchars($_GET['error']); ?>
+      </div>
+    <?php endif; ?>
+
+    <!-- Principal Login Form -->
+    <form id="principalLoginForm" method="POST" action="SchoolLogin.php">
+      <input type="hidden" id="loginTypeHidden" name="login_type" value="principal">
+      <div class="input-group">
+        <label for="loginEmail">Principal Email</label>
+        <input type="email" id="loginEmail" name="email" placeholder="Enter principal email" required>
+      </div>
+
+      <div class="input-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" name="password" placeholder="Enter password" required>
+      </div>
+
+      <button type="submit" name="login">Login to Principal Admin</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <!-- Footer with icon and note for register schools -->
+    <div class="footer-note" onclick="window.location.href='SchoolRegistration.html'">
+      <i class="fas fa-school"></i>
+      <span>Register your school to get started!</span>
+    </div>
+
+    <p>
+      <span class="toggle-link" onclick="window.location.href='TeacherLogin.html'">Login as Teacher Admin</span>
+    </p>
+
+    <p>
+      <span class="toggle-link" onclick="window.location.href='leaderboard.php'">🏆 View Leaderboard</span>
+    </p>
+
+    <p>
+      <span class="toggle-link" onclick="window.location.href='UserLogin.html'">← Back to User Login</span>
+    </p>
+  </div>
+
+</body>
+</html>

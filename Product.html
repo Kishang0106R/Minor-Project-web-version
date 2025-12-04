@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0;url=Product.php?product_id=">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Redirecting…</title>
+    <script>
+      // Preserve product_id query parameter and redirect to Product.php
+      (function(){
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var pid = params.get('product_id') || '';
+          var target = 'Product.php' + (pid ? ('?product_id=' + encodeURIComponent(pid)) : '');
+          window.location.replace(target);
+        } catch(e) {
+          // Fallback meta refresh already present
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to the product page. If you are not redirected, <a id="redir-link" href="#">click here</a>.</p>
+    <script>
+      var pid = new URLSearchParams(window.location.search).get('product_id') || '';
+      var link = 'Product.php' + (pid ? ('?product_id=' + encodeURIComponent(pid)) : '');
+      document.getElementById('redir-link').setAttribute('href', link);
+    </script>
+  </body>
+</html>

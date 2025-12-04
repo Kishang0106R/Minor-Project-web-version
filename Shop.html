@@ -1,0 +1,140 @@
+<?php
+require_once 'config.php';
+require_once 'check_session_timeout.php';
+check_session_timeout('UserLogin.html');
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: UserLogin.html");
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rawspark - Products</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo">
+      <img src="images/weblogo.jpg" alt="Logo" style="height: 48px; width: 48px;">
+    </div>
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search...">
+      <button class="clear-search">✕</button>
+    </div>
+  </div>
+  <nav class="header-nav">
+  <?php if (isset($_SESSION['user_name'])): ?>
+    <a href="Profile.php" class="profile-link">
+      <img src="images/profilePhoto.png" alt="Profile Photo" class="profile-photo">
+      <span class="welcome-text">Welcome,</span>
+      <span class="user-name"><?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
+    </a>
+    <a href="logout.php" class="logout-btn">Logout</a>
+  <?php endif; ?>
+</nav>
+
+</header>
+
+<?php if (isset($_SESSION['user_name'])) { ?>
+<main class="main-content">
+  <section class="products-section">
+    <h2 class="section-title">Available Products</h2>
+    <div id="products-grid" class="product-grid">
+      <!-- Products will be loaded dynamically -->
+    </div>
+  </section>
+</main>
+
+<script>
+    // JavaScript for shop.html
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Page loaded, loading products...');
+        loadProducts();
+    });
+
+    function loadProducts() {
+        console.log('Fetching products...');
+        fetch('get_uploaded_products.php?shop=1')
+            .then(response => {
+                console.log('Response received:', response);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+                if (data.success) {
+                    displayProducts(data.products);
+                } else {
+                    console.error('Error loading products:', data.error);
+                    document.getElementById('products-grid').innerHTML = '<p>No products available.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('products-grid').innerHTML = '<p>Error loading products.</p>';
+            });
+    }
+
+    function displayProducts(products) {
+        const productsGrid = document.getElementById('products-grid');
+
+        if (products.length === 0) {
+            productsGrid.innerHTML = '<p>No products available.</p>';
+            return;
+        }
+
+        productsGrid.innerHTML = '';
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'product-image-container';
+
+            if (product.product_image) {
+                const img = document.createElement('img');
+                img.src = 'product_images/' + product.product_image;
+                img.alt = product.product_name;
+                img.className = 'product-image';
+                imageContainer.appendChild(img);
+            } else {
+                const noImageText = document.createElement('span');
+                noImageText.className = 'no-image-text';
+                noImageText.textContent = 'No Image Available';
+                imageContainer.appendChild(noImageText);
+            }
+
+            const productName = document.createElement('div');
+            productName.className = 'product-name';
+            productName.textContent = product.product_name;
+
+            const productPrice = document.createElement('div');
+            productPrice.className = 'product-price';
+            productPrice.textContent = product.product_price + 'Rs';
+
+            // Make the product card clickable
+            productCard.style.cursor = 'pointer';
+      productCard.addEventListener('click', function() {
+        // Open the PHP-rendered product page (must use .php so server executes PHP)
+        window.location.href = 'Product.php?product_id=' + product.product_id;
+      });
+
+            productCard.appendChild(imageContainer);
+            productCard.appendChild(productName);
+            productCard.appendChild(productPrice);
+
+            productsGrid.appendChild(productCard);
+    });
+}
+</script>
+
+</body>
+</html>
